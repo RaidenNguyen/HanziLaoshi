@@ -44,7 +44,6 @@ export function VocabCard({ vocab }: VocabCardProps) {
       <Button
         variant="ghost"
         size="icon"
-        size="icon"
         className="mt-4 sm:mt-6 rounded-full hover:bg-orange-50 hover:text-[#ff6933] text-gray-400 cursor-pointer active:scale-90 transition-transform"
         onClick={playAudio}
       >
