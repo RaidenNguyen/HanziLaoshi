@@ -6,12 +6,15 @@ import { useSearchParams } from "next/navigation"
 import { signup } from "./actions"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
-import { User, Mail, Lock, Flag, ArrowRight } from "lucide-react"
+import { User, Mail, Lock, Flag, ArrowRight, ShieldCheck } from "lucide-react"
 import { toast } from "sonner"
 
 export function RegisterForm() {
   const [isPending, startTransition] = useTransition()
   const [termsAccepted, setTermsAccepted] = useState(false)
+  const [password, setPassword] = useState("")
+  const [confirmPassword, setConfirmPassword] = useState("")
+  const [passwordError, setPasswordError] = useState("")
   const searchParams = useSearchParams()
 
   useEffect(() => {
@@ -21,23 +24,64 @@ export function RegisterForm() {
     }
   }, [searchParams])
 
+  // Validate passwords match
+  useEffect(() => {
+    if (confirmPassword && password !== confirmPassword) {
+      setPasswordError("Mật khẩu không khớp!")
+    } else {
+      setPasswordError("")
+    }
+  }, [password, confirmPassword])
+
+
   const handleSubmit = (formData: FormData) => {
+    const formPassword = formData.get("password") as string
+    const formConfirmPassword = formData.get("confirmPassword") as string
+
     if (!termsAccepted) {
       toast.warning("Vui lòng đồng ý với điều khoản sử dụng!")
+      return
+    }
+
+    if (formPassword !== formConfirmPassword) {
+      toast.error("Mật khẩu xác nhận không khớp!")
+      return
+    }
+
+    if (!formPassword || formPassword.length < 6) {
+      toast.error("Mật khẩu phải có ít nhất 6 ký tự!")
       return
     }
 
     startTransition(async () => {
       try {
         await signup(formData)
-        // If successful, the server action redirects, so we might not see this
-        // But if we prevent redirect on server for email confirm, we'd see this.
-        // Assuming redirect on success for now from the server action.
-      } catch (e) {
+      } catch (e: unknown) {
+        // Log the full error for debugging
+        console.error("Registration catch block - Full error:", e)
+        console.error("Error type:", typeof e)
+        if (e && typeof e === 'object') {
+          console.error("Error keys:", Object.keys(e as object))
+          console.error("Has digest:", 'digest' in e)
+          if ('digest' in e) {
+            console.error("Digest value:", (e as { digest?: string }).digest)
+          }
+        }
+
+        // IMPORTANT: Next.js redirect() throws an error with digest starting with "NEXT_REDIRECT"
+        // We must rethrow this error to allow the redirect to work
+        if (e && typeof e === 'object' && 'digest' in e) {
+          const digest = (e as { digest?: string }).digest
+          if (digest?.startsWith('NEXT_REDIRECT')) {
+            throw e
+          }
+        }
+        console.error("Error NOT a redirect, showing toast")
         toast.error("Đã có lỗi xảy ra. Vui lòng thử lại.")
       }
     })
   }
+
 
   return (
     <form action={handleSubmit} className="space-y-3">
@@ -77,7 +121,27 @@ export function RegisterForm() {
           icon={<Lock className="w-5 h-5" />}
           required
           className="py-3 text-base"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
         />
+      </div>
+
+      <div className="space-y-1.5">
+        <label className="block text-sm font-bold text-gray-700 dark:text-gray-200" htmlFor="confirmPassword">Xác nhận mật khẩu</label>
+        <Input
+          id="confirmPassword"
+          name="confirmPassword"
+          type="password"
+          placeholder="••••••••"
+          icon={<ShieldCheck className="w-5 h-5" />}
+          required
+          className={`py-3 text-base ${passwordError ? 'border-red-500 focus:ring-red-500' : ''}`}
+          value={confirmPassword}
+          onChange={(e) => setConfirmPassword(e.target.value)}
+        />
+        {passwordError && (
+          <p className="text-xs text-red-500 font-medium mt-1">{passwordError}</p>
+        )}
       </div>
 
       <div className="space-y-1.5">
