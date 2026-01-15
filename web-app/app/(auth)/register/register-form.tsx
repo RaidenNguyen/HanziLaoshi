@@ -57,17 +57,6 @@ export function RegisterForm() {
       try {
         await signup(formData)
       } catch (e: unknown) {
-        // Log the full error for debugging
-        console.error("Registration catch block - Full error:", e)
-        console.error("Error type:", typeof e)
-        if (e && typeof e === 'object') {
-          console.error("Error keys:", Object.keys(e as object))
-          console.error("Has digest:", 'digest' in e)
-          if ('digest' in e) {
-            console.error("Digest value:", (e as { digest?: string }).digest)
-          }
-        }
-
         // IMPORTANT: Next.js redirect() throws an error with digest starting with "NEXT_REDIRECT"
         // We must rethrow this error to allow the redirect to work
         if (e && typeof e === 'object' && 'digest' in e) {
@@ -76,7 +65,8 @@ export function RegisterForm() {
             throw e
           }
         }
-        console.error("Error NOT a redirect, showing toast")
+
+        console.error("Registration error:", e)
         toast.error("Đã có lỗi xảy ra. Vui lòng thử lại.")
       }
     })

@@ -24,14 +24,19 @@ export function LoginForm() {
     const message = searchParams.get("message")
 
     if (error) {
-      toast.error(error)
       toastShownRef.current = true
-      // Clear params without reloading
-      router.replace('/login', { scroll: false })
+      toast.error(decodeURIComponent(error))
+      // Delay clearing params to ensure toast displays
+      setTimeout(() => {
+        router.replace('/login', { scroll: false })
+      }, 100)
     } else if (message) {
-      toast.success(message)
       toastShownRef.current = true
-      router.replace('/login', { scroll: false })
+      toast.success(decodeURIComponent(message))
+      // Delay clearing params to ensure toast displays
+      setTimeout(() => {
+        router.replace('/login', { scroll: false })
+      }, 100)
     }
   }, [searchParams, router])
 
@@ -76,7 +81,7 @@ export function LoginForm() {
 
       <div className="flex items-center justify-between text-sm">
         <label className="flex items-center gap-2 cursor-pointer group">
-          <input type="checkbox" className="w-4 h-4 rounded border-gray-300 text-primary focus:ring-primary" />
+          <input type="checkbox" name="remember" className="w-4 h-4 rounded border-gray-300 text-primary focus:ring-primary" />
           <span className="text-text-secondary dark:text-gray-400 group-hover:text-text-main transition-colors">Ghi nhớ tôi</span>
         </label>
         <Link href="/forgot-password" className="font-semibold text-amber-600 hover:text-amber-700 transition-colors">Quên mật khẩu?</Link>

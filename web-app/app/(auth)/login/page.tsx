@@ -1,5 +1,6 @@
 
 import Link from "next/link";
+import { Suspense } from "react";
 import { LoginForm } from "./login-form";
 import { Button } from "@/components/ui/button";
 import { Lock } from "lucide-react";
@@ -58,7 +59,9 @@ export default function LoginPage() {
           </div>
 
           {/* Login Form Client Component */}
-          <LoginForm />
+          <Suspense fallback={<div className="text-center py-4">Đang tải...</div>}>
+            <LoginForm />
+          </Suspense>
 
           {/* Divider */}
           <div className="relative my-8">

@@ -40,6 +40,8 @@ export async function middleware(request: NextRequest) {
     "/login",
     "/register",
     "/auth/callback",
+    "/forgot-password",
+    "/reset-password",
     "/web-app/public",
   ];
   const isPublicPath =
