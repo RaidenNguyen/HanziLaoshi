@@ -60,85 +60,96 @@ function FlashcardItem({ card, direction, onNext, onPrev, playAudio }: Flashcard
       animate={{ x: 0, opacity: 1, scale: 1 }}
       exit={{ x: direction === 1 ? -300 : 300, opacity: 0, scale: 0.8 }}
       transition={{ duration: 0.2, type: "spring", stiffness: 300, damping: 25 }}
-      className="w-full h-full perspective-1000 cursor-pointer active:cursor-grabbing group absolute top-0 left-0"
+      className="w-full h-full cursor-pointer active:cursor-grabbing group absolute top-0 left-0"
       whileTap={{ scale: 0.98 }}
     >
       <div
-        className="w-full h-full"
+        className="w-full h-full relative"
         onClick={() => {
           if (Math.abs(x.get()) < 10) setIsFlipped(!isFlipped)
         }}
       >
+        {/* Front - only visible when NOT flipped */}
         <motion.div
-          className="relative w-full h-full preserve-3d transition-transform duration-500"
-          animate={{ rotateY: isFlipped ? 180 : 0 }}
-          transition={{ type: "spring", stiffness: 400, damping: 25, mass: 0.8 }}
-          style={{ transformStyle: "preserve-3d" }}
+          className="absolute inset-0 bg-gradient-to-br from-[#ff9966] to-[#ff5e62] rounded-[1.5rem] md:rounded-[2rem] shadow-xl border-4 border-white/20 flex flex-col items-center justify-center p-4 md:p-8 hover:shadow-2xl transition-shadow overflow-hidden"
+          initial={false}
+          animate={{
+            opacity: isFlipped ? 0 : 1,
+            scale: isFlipped ? 0.95 : 1,
+          }}
+          transition={{ duration: 0.3 }}
+          style={{
+            pointerEvents: isFlipped ? 'none' : 'auto',
+            zIndex: isFlipped ? 1 : 2,
+          }}
         >
-          {/* Front */}
-          <div
-            className="absolute inset-0 backface-hidden bg-gradient-to-br from-[#ff9966] to-[#ff5e62] rounded-[1.5rem] md:rounded-[2rem] shadow-xl border-4 border-white/20 flex flex-col items-center justify-center p-4 md:p-8 hover:shadow-2xl transition-shadow overflow-hidden"
-            style={{ WebkitBackfaceVisibility: 'hidden', backfaceVisibility: 'hidden' }}
+          <div className="absolute top-0 left-0 w-full h-full bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10 pointer-events-none"></div>
+
+          <span className="text-xs md:text-base font-black text-white/80 uppercase tracking-[0.2em] mb-4 md:mb-12 z-10">Mặt trước</span>
+          <h2 className="text-7xl md:text-[9rem] font-black text-white mb-6 md:mb-10 leading-none drop-shadow-md z-10">{card.hanzi}</h2>
+
+          <Button
+            variant="ghost"
+            size="icon"
+            className="rounded-full bg-white/20 text-white hover:bg-white/30 hover:scale-110 active:scale-90 transition-all duration-200 w-12 h-12 md:w-16 md:h-16 z-20 backdrop-blur-sm cursor-pointer"
+            onClick={(e) => playAudio(e, card.audio_url)}
           >
-            <div className="absolute top-0 left-0 w-full h-full bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10 pointer-events-none"></div>
+            <Volume2 className="w-6 h-6 md:w-8 md:h-8" />
+          </Button>
 
-            <span className="text-xs md:text-base font-black text-white/80 uppercase tracking-[0.2em] mb-4 md:mb-12 z-10">Mặt trước</span>
-            <h2 className="text-7xl md:text-[9rem] font-black text-white mb-6 md:mb-10 leading-none drop-shadow-md z-10">{card.hanzi}</h2>
+          <p className="absolute bottom-4 md:bottom-8 text-xs md:text-base font-black text-white/90 animate-pulse z-10">Chạm để lật</p>
 
-            <Button
-              variant="ghost"
-              size="icon"
-              className="rounded-full bg-white/20 text-white hover:bg-white/30 hover:scale-110 active:scale-90 transition-all duration-200 w-12 h-12 md:w-16 md:h-16 z-20 backdrop-blur-sm cursor-pointer"
-              onClick={(e) => playAudio(e, card.audio_url)}
-            >
-              <Volume2 className="w-6 h-6 md:w-8 md:h-8" />
-            </Button>
+          {/* Teacher Cat Image */}
+          <img
+            src="/teacher-cat.png"
+            alt="Teacher Cat"
+            className="absolute -bottom-6 -right-6 w-24 h-24 md:-bottom-10 md:-right-10 md:w-48 md:h-48 object-contain mix-blend-multiply opacity-90 z-0 pointer-events-none transform -rotate-12"
+          />
+        </motion.div>
 
-            <p className="absolute bottom-4 md:bottom-8 text-xs md:text-base font-black text-white/90 animate-pulse z-10">Chạm để lật</p>
-
-            {/* Teacher Cat Image (Absolute positioned) */}
-            <img
-              src="/teacher-cat.png"
-              alt="Teacher Cat"
-              className="absolute -bottom-6 -right-6 w-24 h-24 md:-bottom-10 md:-right-10 md:w-48 md:h-48 object-contain mix-blend-multiply opacity-90 z-0 pointer-events-none transform -rotate-12"
-            />
-          </div>
-
-          {/* Back */}
-          <div
-            className="absolute inset-0 backface-hidden bg-gradient-to-br from-[#fffbf5] to-white rounded-[1.5rem] md:rounded-[2rem] shadow-xl border-2 border-orange-200 flex flex-col items-center justify-center p-3 md:p-8 overflow-y-auto"
-            style={{ WebkitBackfaceVisibility: 'hidden', backfaceVisibility: 'hidden', WebkitTransform: 'rotateY(180deg)', transform: 'rotateY(180deg)' }}
-          >
-            <div className="w-full flex flex-col items-center pt-0 md:pt-2">
-              <div className="flex items-center gap-3 md:gap-6 mb-2 md:mb-4">
-                <h2 className="text-4xl md:text-6xl font-black text-gray-900">{card.hanzi}</h2>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="rounded-full bg-orange-100 text-[#ff6933] hover:bg-orange-200 active:scale-90 transition-transform w-8 h-8 md:w-12 md:h-12 cursor-pointer"
-                  onClick={(e) => playAudio(e, card.audio_url)}
-                >
-                  <Volume2 className="w-4 h-4 md:w-6 md:h-6" />
-                </Button>
-              </div>
-
-              <p className="text-2xl md:text-4xl font-black text-[#ff6933] font-mono mb-2 md:mb-6 tracking-wide">{card.pinyin}</p>
-
-              <div className="bg-white p-3 md:p-6 rounded-xl md:rounded-2xl border-2 border-orange-100 w-full mb-3 md:mb-6 shadow-sm">
-                <p className="text-lg md:text-2xl text-gray-800 text-center font-bold leading-snug">
-                  {card.meaning}
-                </p>
-              </div>
-
-              {card.example && (
-                <div className="w-full bg-orange-50/80 p-3 md:p-5 rounded-xl md:rounded-2xl border border-orange-200 text-left space-y-1 md:space-y-3">
-                  <p className="text-[10px] md:text-xs font-black text-orange-600 uppercase tracking-wider">Ví dụ:</p>
-                  <p className="text-sm md:text-xl text-gray-900 font-bold leading-relaxed">{card.example}</p>
-                  <p className="text-xs md:text-lg text-gray-600 font-semibold italic">{card.example_pinyin}</p>
-                  <p className="text-xs md:text-lg text-gray-700 font-semibold">{card.example_meaning}</p>
-                </div>
-              )}
+        {/* Back - only visible when flipped */}
+        <motion.div
+          className="absolute inset-0 bg-gradient-to-br from-[#fffbf5] to-white rounded-[1.5rem] md:rounded-[2rem] shadow-xl border-2 border-orange-200 flex flex-col items-center justify-center p-3 md:p-8 overflow-y-auto"
+          initial={false}
+          animate={{
+            opacity: isFlipped ? 1 : 0,
+            scale: isFlipped ? 1 : 0.95,
+          }}
+          transition={{ duration: 0.3 }}
+          style={{
+            pointerEvents: isFlipped ? 'auto' : 'none',
+            zIndex: isFlipped ? 2 : 1,
+          }}
+        >
+          <div className="w-full flex flex-col items-center pt-0 md:pt-2">
+            <div className="flex items-center gap-3 md:gap-6 mb-2 md:mb-4">
+              <h2 className="text-4xl md:text-6xl font-black text-gray-900">{card.hanzi}</h2>
+              <Button
+                variant="ghost"
+                size="icon"
+                className="rounded-full bg-orange-100 text-[#ff6933] hover:bg-orange-200 active:scale-90 transition-transform w-8 h-8 md:w-12 md:h-12 cursor-pointer"
+                onClick={(e) => playAudio(e, card.audio_url)}
+              >
+                <Volume2 className="w-4 h-4 md:w-6 md:h-6" />
+              </Button>
             </div>
+
+            <p className="text-2xl md:text-4xl font-black text-[#ff6933] font-mono mb-2 md:mb-6 tracking-wide">{card.pinyin}</p>
+
+            <div className="bg-white p-3 md:p-6 rounded-xl md:rounded-2xl border-2 border-orange-100 w-full mb-3 md:mb-6 shadow-sm">
+              <p className="text-lg md:text-2xl text-gray-800 text-center font-bold leading-snug">
+                {card.meaning}
+              </p>
+            </div>
+
+            {card.example && (
+              <div className="w-full bg-orange-50/80 p-3 md:p-5 rounded-xl md:rounded-2xl border border-orange-200 text-left space-y-1 md:space-y-3">
+                <p className="text-[10px] md:text-xs font-black text-orange-600 uppercase tracking-wider">Ví dụ:</p>
+                <p className="text-sm md:text-xl text-gray-900 font-bold leading-relaxed">{card.example}</p>
+                <p className="text-xs md:text-lg text-gray-600 font-semibold italic">{card.example_pinyin}</p>
+                <p className="text-xs md:text-lg text-gray-700 font-semibold">{card.example_meaning}</p>
+              </div>
+            )}
           </div>
         </motion.div>
       </div>
