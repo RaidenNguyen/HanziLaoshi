@@ -76,7 +76,10 @@ function FlashcardItem({ card, direction, onNext, onPrev, playAudio }: Flashcard
           style={{ transformStyle: "preserve-3d" }}
         >
           {/* Front */}
-          <div className="absolute inset-0 backface-hidden bg-gradient-to-br from-[#ff9966] to-[#ff5e62] rounded-[1.5rem] md:rounded-[2rem] shadow-xl border-4 border-white/20 flex flex-col items-center justify-center p-4 md:p-8 hover:shadow-2xl transition-shadow overflow-hidden">
+          <div
+            className="absolute inset-0 backface-hidden bg-gradient-to-br from-[#ff9966] to-[#ff5e62] rounded-[1.5rem] md:rounded-[2rem] shadow-xl border-4 border-white/20 flex flex-col items-center justify-center p-4 md:p-8 hover:shadow-2xl transition-shadow overflow-hidden"
+            style={{ WebkitBackfaceVisibility: 'hidden', backfaceVisibility: 'hidden' }}
+          >
             <div className="absolute top-0 left-0 w-full h-full bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10 pointer-events-none"></div>
 
             <span className="text-xs md:text-base font-black text-white/80 uppercase tracking-[0.2em] mb-4 md:mb-12 z-10">Mặt trước</span>
@@ -103,8 +106,8 @@ function FlashcardItem({ card, direction, onNext, onPrev, playAudio }: Flashcard
 
           {/* Back */}
           <div
-            className="absolute inset-0 backface-hidden bg-gradient-to-br from-[#fffbf5] to-white rounded-[1.5rem] md:rounded-[2rem] shadow-xl border-2 border-orange-200 flex flex-col items-center justify-center p-3 md:p-8 rotate-y-180 overflow-y-auto"
-            style={{ transform: "rotateY(180deg)" }}
+            className="absolute inset-0 backface-hidden bg-gradient-to-br from-[#fffbf5] to-white rounded-[1.5rem] md:rounded-[2rem] shadow-xl border-2 border-orange-200 flex flex-col items-center justify-center p-3 md:p-8 overflow-y-auto"
+            style={{ WebkitBackfaceVisibility: 'hidden', backfaceVisibility: 'hidden', WebkitTransform: 'rotateY(180deg)', transform: 'rotateY(180deg)' }}
           >
             <div className="w-full flex flex-col items-center pt-0 md:pt-2">
               <div className="flex items-center gap-3 md:gap-6 mb-2 md:mb-4">
