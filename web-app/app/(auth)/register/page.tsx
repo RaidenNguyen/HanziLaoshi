@@ -88,7 +88,7 @@ export default function RegisterPage() {
       </main>
 
       <footer className="py-6 text-center relative z-10 text-sm text-gray-500">
-        © 2024 HSK Master. Made with <span className="text-red-500 inline-block animate-pulse">♥</span> for Vietnamese Students.
+        © 2025 HSK Master. Made with <span className="text-red-500 inline-block animate-pulse">♥</span> for Vietnamese Students.
       </footer>
     </div>
   );

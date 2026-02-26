@@ -141,7 +141,7 @@ export default function LoginPage() {
         </div>
 
         <div className="mt-8 text-xs text-gray-400 dark:text-gray-600 text-center">
-          © 2024 HSK Smart Test. Bản quyền được bảo lưu.
+          © 2025 HSK Smart Test. Bản quyền được bảo lưu.
         </div>
       </div>
     </div>
