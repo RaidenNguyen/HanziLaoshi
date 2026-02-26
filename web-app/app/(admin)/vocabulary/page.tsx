@@ -46,7 +46,7 @@ export default async function VocabularyPage() {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h1 className="text-3xl font-bold text-[#2E333D]">Quản lý từ vựng</h1>
-          <p className="text-gray-500 mt-1">Danh sách từ vựng HSK 1-6</p>
+          <p className="text-gray-500 mt-1">Danh sách từ vựng HSK 1-9</p>
         </div>
         <div className="flex items-center gap-3">
           <ExcelUploader />

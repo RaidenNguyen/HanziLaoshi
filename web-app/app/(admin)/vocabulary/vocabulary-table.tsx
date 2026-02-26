@@ -89,7 +89,14 @@ export function VocabularyTable({ initialData }: { initialData: Vocabulary[] }) 
       vocab.pinyin.toLowerCase().includes(searchTerm.toLowerCase()) ||
       vocab.meaning.toLowerCase().includes(searchTerm.toLowerCase())
 
-    const matchesLevel = selectedLevel === "all" || vocab.hsk_level.toString() === selectedLevel
+    let matchesLevel = false
+    if (selectedLevel === "all") {
+      matchesLevel = true
+    } else if (selectedLevel === "7-9") {
+      matchesLevel = vocab.hsk_level >= 7 && vocab.hsk_level <= 9
+    } else {
+      matchesLevel = vocab.hsk_level.toString() === selectedLevel
+    }
 
     return matchesSearch && matchesLevel
   })
@@ -245,6 +252,10 @@ export function VocabularyTable({ initialData }: { initialData: Vocabulary[] }) 
               <SelectItem value="4">HSK 4</SelectItem>
               <SelectItem value="5">HSK 5</SelectItem>
               <SelectItem value="6">HSK 6</SelectItem>
+              <SelectItem value="7-9">HSK 7-9</SelectItem>
+              <SelectItem value="7">HSK 7</SelectItem>
+              <SelectItem value="8">HSK 8</SelectItem>
+              <SelectItem value="9">HSK 9</SelectItem>
             </SelectContent>
           </Select>
 
@@ -300,6 +311,9 @@ export function VocabularyTable({ initialData }: { initialData: Vocabulary[] }) 
                       ${vocab.hsk_level === 4 ? "bg-yellow-50 text-yellow-700 border-yellow-200" : ""}
                       ${vocab.hsk_level === 5 ? "bg-orange-50 text-orange-700 border-orange-200" : ""}
                       ${vocab.hsk_level === 6 ? "bg-red-50 text-red-700 border-red-200" : ""}
+                      ${vocab.hsk_level === 7 ? "bg-purple-50 text-purple-700 border-purple-200" : ""}
+                      ${vocab.hsk_level === 8 ? "bg-pink-50 text-pink-700 border-pink-200" : ""}
+                      ${vocab.hsk_level === 9 ? "bg-indigo-50 text-indigo-700 border-indigo-200" : ""}
                     `}>
                       HSK {vocab.hsk_level}
                     </span>
@@ -438,7 +452,7 @@ export function VocabularyTable({ initialData }: { initialData: Vocabulary[] }) 
                     <SelectValue placeholder="Chọn Level" />
                   </SelectTrigger>
                   <SelectContent>
-                    {[1, 2, 3, 4, 5, 6].map(level => (
+                    {[1, 2, 3, 4, 5, 6, 7, 8, 9].map(level => (
                       <SelectItem key={level} value={level.toString()}>HSK {level}</SelectItem>
                     ))}
                   </SelectContent>
