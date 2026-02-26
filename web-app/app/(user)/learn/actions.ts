@@ -6,7 +6,7 @@ import { revalidatePath } from "next/cache";
 export async function getVocabulary(
   level: number = 1,
   page: number = 1,
-  limit: number = 20
+  limit: number = 20,
 ) {
   const supabase = await createClient();
   const {
@@ -33,7 +33,7 @@ export async function getVocabulary(
         mastery_score
       )
     `,
-      { count: "exact" }
+      { count: "exact" },
     )
     .eq("hsk_level", level)
     .range(from, to)
@@ -61,7 +61,7 @@ export async function getUserStats() {
 
   if (!user) return [];
 
-  const levels = [1, 2, 3, 4, 5, 6];
+  const levels = [1, 2, 3, 4, 5, 6, 7, 8, 9];
   const stats = await Promise.all(
     levels.map(async (level) => {
       const { count: total } = await supabase
@@ -96,7 +96,7 @@ export async function getUserStats() {
         learning: learning || 0,
         new: (total || 0) - ((mastered || 0) + (learning || 0)),
       };
-    })
+    }),
   );
 
   return stats;
@@ -106,7 +106,7 @@ export async function getFilteredVocabulary(
   level: number,
   status: "new" | "learning" | "mastered",
   page: number = 1,
-  limit: number = 25
+  limit: number = 25,
 ) {
   const supabase = await createClient();
   const {
@@ -155,7 +155,7 @@ export async function getFilteredVocabulary(
           status,
           mastery_score
         )
-       `
+       `,
       )
       .in("id", pagedIds);
 
@@ -188,7 +188,7 @@ export async function getFilteredVocabulary(
           status,
           mastery_score
         )
-       `
+       `,
       )
       .eq("hsk_level", level)
       .eq("user_vocabulary.user_id", user.id)
@@ -207,7 +207,7 @@ export async function getFilteredVocabulary(
 
 export async function updateVocabStatus(
   vocabId: string,
-  status: "new" | "learning" | "mastered"
+  status: "new" | "learning" | "mastered",
 ) {
   const supabase = await createClient();
   const {
@@ -225,7 +225,7 @@ export async function updateVocabStatus(
     },
     {
       onConflict: "user_id,vocab_id",
-    }
+    },
   );
 
   if (error) throw error;

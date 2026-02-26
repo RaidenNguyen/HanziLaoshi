@@ -72,7 +72,7 @@ export default async function LearnPage({
 
         {/* 2. Level Selector (Below - Vertical, Compact) */}
         <div className="flex flex-col gap-2">
-          {[1, 2, 3, 4, 5, 6].map((l) => {
+          {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((l) => {
             const stat = stats.find(s => s.level === l) || { level: l, total: 0, mastered: 0, new: 0, learning: 0 }
             const progress = stat.total > 0 ? (stat.mastered / stat.total) * 100 : 0
             const isActive = level === l
