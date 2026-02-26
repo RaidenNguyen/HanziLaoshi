@@ -211,27 +211,27 @@ export default function BattleModePage() {
     <div className="min-h-screen bg-[#fcfbf8] font-display flex flex-col">
 
       {/* Navigation Header */}
-      <div className="w-full bg-white border-b border-[#f0ebe0] px-6 py-4 flex items-center justify-between shadow-sm sticky top-0 z-50">
-        <div className="flex items-center gap-6">
-          <Link href="/review" className="flex items-center gap-2 text-[#1d180c] font-black hover:text-[#e7564a] transition-colors">
+      <div className="w-full bg-white border-b border-[#f0ebe0] px-3 sm:px-6 py-3 sm:py-4 flex items-center justify-between shadow-sm sticky top-0 z-50">
+        <div className="flex items-center gap-2 sm:gap-4">
+          <Link href="/review" className="flex items-center gap-1 text-[#1d180c] font-black hover:text-[#e7564a] transition-colors shrink-0">
             <ChevronLeft className="w-5 h-5" />
-            <span>Quay lại</span>
+            <span className="hidden sm:inline">Quay lại</span>
           </Link>
 
-          <div className="flex items-center gap-2 px-3 py-1 bg-[#f4f0e6] rounded-full text-[#6b5c35] text-xs font-bold uppercase tracking-wider">
-            <span>Tổng Hán Tự:</span>
-            <span className="text-[#1d180c] text-sm">{totalWords}</span>
+          <div className="flex items-center gap-1 px-2 py-0.5 bg-[#f4f0e6] rounded-full text-[#6b5c35] text-[10px] sm:text-xs font-bold shrink-0">
+            <span>Tổng:</span>
+            <span className="text-[#1d180c] text-xs sm:text-sm font-black">{totalWords}</span>
           </div>
         </div>
 
-        <div className="flex items-center gap-4">
-          <div className="flex items-center gap-2">
-            <span className="text-sm font-bold text-[#1d180c]">Trang:</span>
+        <div className="flex items-center gap-2 sm:gap-4">
+          <div className="flex items-center gap-1 sm:gap-2">
+            <span className="text-xs sm:text-sm font-bold text-[#1d180c]">Trang:</span>
             <Select
               value={page.toString()}
               onValueChange={(val) => setPage(parseInt(val))}
             >
-              <SelectTrigger className="w-[80px] h-9 bg-[#1d180c] text-white border-none font-bold rounded-lg focus:ring-0">
+              <SelectTrigger className="w-[60px] sm:w-[80px] h-8 sm:h-9 bg-[#1d180c] text-white border-none font-bold rounded-lg focus:ring-0 text-xs sm:text-sm">
                 <SelectValue placeholder="1" />
               </SelectTrigger>
               <SelectContent className="bg-white border-[#f0ebe0]">
@@ -244,9 +244,9 @@ export default function BattleModePage() {
             </Select>
           </div>
 
-          <div className="bg-[#f4f4f5] px-3 py-1.5 rounded-lg text-sm font-black text-[#1d180c]">
+          <div className="bg-[#f4f4f5] px-2 sm:px-3 py-1 sm:py-1.5 rounded-lg text-xs sm:text-sm font-black text-[#1d180c]">
             <span>{currentWordIndex + 1}</span>
-            <span className="mx-1 text-gray-400">/</span>
+            <span className="mx-0.5 sm:mx-1 text-gray-400">/</span>
             <span>{words.length}</span>
           </div>
         </div>
