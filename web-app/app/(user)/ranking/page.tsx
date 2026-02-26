@@ -12,7 +12,7 @@ const RANK_COLORS = [
 ]
 
 const HSK_COLORS = [
-  "#22c55e", "#14b8a6", "#3b82f6", "#8b5cf6", "#ec4899", "#ef4444", "#f97316", "#f59e0b", "#eab308"
+  "#22c55e", "#14b8a6", "#3b82f6", "#8b5cf6", "#ec4899", "#ef4444", "#f97316"
 ]
 
 function getAvatar(name: string | null, url: string | null) {
@@ -154,8 +154,8 @@ export default function RankingPage() {
               <button
                 onClick={() => handleToggleExpand(user.id)}
                 className={`w-full rounded-2xl transition-all cursor-pointer border-2 ${isMe
-                    ? "bg-[#ffc629]/10 border-[#ffc629] shadow-md"
-                    : "bg-white border-[#f0ebe0] hover:border-[#ffc629]/40 hover:shadow-sm"
+                  ? "bg-[#ffc629]/10 border-[#ffc629] shadow-md"
+                  : "bg-white border-[#f0ebe0] hover:border-[#ffc629]/40 hover:shadow-sm"
                   } ${rank <= 3 ? "shadow-sm" : ""}`}
               >
                 <div className="flex items-center gap-3 sm:gap-4 px-3 sm:px-5 py-3 sm:py-4">
@@ -166,9 +166,9 @@ export default function RankingPage() {
 
                   {/* Avatar */}
                   <div className={`w-10 h-10 sm:w-12 sm:h-12 rounded-full shrink-0 flex items-center justify-center text-lg font-black text-white overflow-hidden shadow-sm ${rank === 1 ? "bg-gradient-to-br from-amber-400 to-yellow-500 ring-2 ring-amber-300" :
-                      rank === 2 ? "bg-gradient-to-br from-gray-300 to-slate-400" :
-                        rank === 3 ? "bg-gradient-to-br from-orange-400 to-amber-600" :
-                          "bg-gradient-to-br from-[#1dc9ac] to-[#15867E]"
+                    rank === 2 ? "bg-gradient-to-br from-gray-300 to-slate-400" :
+                      rank === 3 ? "bg-gradient-to-br from-orange-400 to-amber-600" :
+                        "bg-gradient-to-br from-[#1dc9ac] to-[#15867E]"
                     }`}>
                     {user.avatar_url
                       ? <img src={user.avatar_url} alt="" className="w-full h-full object-cover" />
@@ -223,7 +223,7 @@ export default function RankingPage() {
                       {loadingStats === user.id ? (
                         <p className="text-sm text-[#9c9278] text-center py-2 animate-pulse">Đang tải...</p>
                       ) : stats ? (
-                        <div className="grid grid-cols-3 sm:grid-cols-9 gap-2">
+                        <div className="grid grid-cols-3 sm:grid-cols-7 gap-2">
                           {stats.map((s, i) => {
                             const pct = s.total > 0 ? Math.round((s.mastered / s.total) * 100) : 0
                             return (

@@ -41,8 +41,11 @@ export async function getUsers() {
     return { error: "Permission denied" };
   }
 
-  // Fetch all profiles
-  const { data: profiles, error } = await supabase
+  // Use admin client to fetch all profiles (bypass RLS)
+  const { createAdminClient } = await import("@/utils/supabase/admin");
+  const admin = createAdminClient();
+
+  const { data: profiles, error } = await admin
     .from("profiles")
     .select("*")
     .order("created_at", { ascending: false });
@@ -57,18 +60,17 @@ export async function getUsers() {
 
 export async function updateUserRole(
   userId: string,
-  newRole: "user" | "admin"
+  newRole: "user" | "admin",
 ) {
   const supabase = await createClient();
 
-  // Verify admin access (double check)
+  // Verify admin access
   const {
     data: { user },
   } = await supabase.auth.getUser();
 
   if (!user) return { error: "Unauthorized" };
 
-  // Check if the current user is an admin
   const { data: currentUserProfile } = await supabase
     .from("profiles")
     .select("role")
@@ -79,8 +81,11 @@ export async function updateUserRole(
     return { error: "Permission denied" };
   }
 
-  // Update role
-  const { error } = await supabase
+  // Use admin client to bypass RLS
+  const { createAdminClient } = await import("@/utils/supabase/admin");
+  const admin = createAdminClient();
+
+  const { error } = await admin
     .from("profiles")
     .update({ role: newRole })
     .eq("id", userId);
@@ -88,6 +93,53 @@ export async function updateUserRole(
   if (error) {
     console.error("Error updating role:", error);
     return { error: "Failed to update role" };
+  }
+
+  revalidatePath("/users");
+  return { success: true };
+}
+
+export async function deleteUser(userId: string) {
+  const supabase = await createClient();
+
+  // Verify admin access
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) return { error: "Unauthorized" };
+
+  const { data: currentUserProfile } = await supabase
+    .from("profiles")
+    .select("role")
+    .eq("id", user.id)
+    .single();
+
+  if (!currentUserProfile || currentUserProfile.role !== "admin") {
+    return { error: "Permission denied" };
+  }
+
+  // Cannot delete yourself
+  if (userId === user.id) {
+    return { error: "Không thể xóa chính mình" };
+  }
+
+  // Use admin client to delete auth user (cascades to profiles)
+  const { createAdminClient } = await import("@/utils/supabase/admin");
+  const admin = createAdminClient();
+
+  // Delete user_vocabulary first
+  await admin.from("user_vocabulary").delete().eq("user_id", userId);
+
+  // Delete profile
+  await admin.from("profiles").delete().eq("id", userId);
+
+  // Delete from auth.users
+  const { error } = await admin.auth.admin.deleteUser(userId);
+
+  if (error) {
+    console.error("Error deleting user:", error);
+    return { error: "Xóa thất bại: " + error.message };
   }
 
   revalidatePath("/users");

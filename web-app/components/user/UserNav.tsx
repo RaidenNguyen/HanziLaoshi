@@ -120,14 +120,16 @@ export function UserNav({ user, role }: { user: any, role?: string }) {
               </div>
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>
-              <User className="mr-2 h-4 w-4" />
-              <span>Hồ sơ học tập</span>
+            <DropdownMenuItem asChild>
+              <Link href="/profile" className="cursor-pointer w-full">
+                <User className="mr-2 h-4 w-4" />
+                <span>Hồ sơ học tập</span>
+              </Link>
             </DropdownMenuItem>
-            <DropdownMenuItem>
+            {/* <DropdownMenuItem>
               <Settings className="mr-2 h-4 w-4" />
               <span>Cài đặt tài khoản</span>
-            </DropdownMenuItem>
+            </DropdownMenuItem> */}
             <DropdownMenuSeparator />
             {/* Admin Link */}
             {/* @ts-ignore */}

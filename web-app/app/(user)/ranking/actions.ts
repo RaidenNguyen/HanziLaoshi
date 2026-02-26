@@ -77,7 +77,7 @@ export async function getRankings() {
 }
 
 export interface UserLevelStats {
-  level: number;
+  level: string;
   total: number;
   mastered: number;
   learning: number;
@@ -117,7 +117,7 @@ export async function getUserLevelBreakdown(userId: string) {
     userVocabPromise,
   ]);
 
-  // Aggregate
+  // Aggregate per raw level
   const levelMap = new Map<number, { mastered: number; learning: number }>();
   levels.forEach((l) => levelMap.set(l, { mastered: 0, learning: 0 }));
 
@@ -130,15 +130,35 @@ export async function getUserLevelBreakdown(userId: string) {
     }
   });
 
-  const stats: UserLevelStats[] = vocabCounts.map(({ level, total }) => {
-    const s = levelMap.get(level)!;
-    return {
-      level,
-      total,
+  // Build stats with 7-9 combined
+  const stats: UserLevelStats[] = [];
+  for (let i = 1; i <= 6; i++) {
+    const vc = vocabCounts.find((v) => v.level === i)!;
+    const s = levelMap.get(i)!;
+    stats.push({
+      level: String(i),
+      total: vc.total,
       mastered: s.mastered,
       learning: s.learning,
-      new_words: total - s.mastered - s.learning,
-    };
+      new_words: vc.total - s.mastered - s.learning,
+    });
+  }
+
+  // Combine 7-9
+  const combined = { total: 0, mastered: 0, learning: 0 };
+  for (let i = 7; i <= 9; i++) {
+    const vc = vocabCounts.find((v) => v.level === i)!;
+    const s = levelMap.get(i)!;
+    combined.total += vc.total;
+    combined.mastered += s.mastered;
+    combined.learning += s.learning;
+  }
+  stats.push({
+    level: "7-9",
+    total: combined.total,
+    mastered: combined.mastered,
+    learning: combined.learning,
+    new_words: combined.total - combined.mastered - combined.learning,
   });
 
   return stats;
