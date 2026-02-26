@@ -103,7 +103,7 @@ export async function getUserStats() {
 }
 
 // Helper: get combined stats for HSK 7-9
-export function getCombinedStats79(stats: any[]) {
+export async function getCombinedStats79(stats: any[]) {
   const s79 = stats.filter((s) => s.level >= 7 && s.level <= 9);
   return {
     level: "7-9",

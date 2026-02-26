@@ -44,12 +44,12 @@ export default async function LearnPage({
   // Build display stats: replace 7,8,9 with combined
   const displayStats = [
     ...stats.filter(s => s.level <= 6),
-    getCombinedStats79(stats)
+    await getCombinedStats79(stats)
   ]
 
   // Get current stat for mobile header
   const currentStat = levelId === "7-9"
-    ? getCombinedStats79(stats)
+    ? await getCombinedStats79(stats)
     : stats.find(s => s.level === parseInt(levelId)) || { new: 0, learning: 0, mastered: 0, total: 0, level: levelId }
 
   return (
