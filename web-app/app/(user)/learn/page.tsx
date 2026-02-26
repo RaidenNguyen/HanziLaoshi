@@ -42,14 +42,15 @@ export default async function LearnPage({
   const totalPages = Math.ceil(total / limit)
 
   // Build display stats: replace 7,8,9 with combined
+  const combined79Stat = await getCombinedStats79(stats)
   const displayStats = [
     ...stats.filter(s => s.level <= 6),
-    await getCombinedStats79(stats)
+    combined79Stat
   ]
 
   // Get current stat for mobile header
   const currentStat = levelId === "7-9"
-    ? await getCombinedStats79(stats)
+    ? combined79Stat
     : stats.find(s => s.level === parseInt(levelId)) || { new: 0, learning: 0, mastered: 0, total: 0, level: levelId }
 
   return (
@@ -93,7 +94,7 @@ export default async function LearnPage({
         <div className="flex flex-col gap-2">
           {LEVEL_ENTRIES.map((entry) => {
             const entryStat = entry.id === "7-9"
-              ? getCombinedStats79(stats)
+              ? combined79Stat
               : stats.find(s => s.level === parseInt(entry.id)) || { level: parseInt(entry.id), total: 0, mastered: 0, new: 0, learning: 0 }
             const progress = entryStat.total > 0 ? (entryStat.mastered / entryStat.total) * 100 : 0
             const isActive = levelId === entry.id
