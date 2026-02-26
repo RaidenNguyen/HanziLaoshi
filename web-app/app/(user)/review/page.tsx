@@ -40,7 +40,7 @@ export default function ReviewSelectionPage() {
             ? { total: stats.filter(s => s.level >= 7 && s.level <= 9).reduce((acc: number, s: any) => acc + (s.total || 0), 0) }
             : stats.find(s => s.level === parseInt(level.id))
           const totalWords = levelStat ? levelStat.total : 0
-          const difficultyLevel = level.id === "7-9" ? 5 : Math.ceil(parseInt(level.id) / 2)
+          const difficultyLevel = level.id === "7-9" ? 4 : parseInt(level.id)
 
           return (
             <Link href={`/review/${level.id}`} key={level.id} className="group">
@@ -71,7 +71,7 @@ export default function ReviewSelectionPage() {
                       <Star className="w-4 h-4 text-yellow-500 fill-current" />
                       Độ khó: {Array(difficultyLevel).fill(0).map((_, i) => "★").join('')}
                     </span>
-                    <span>{totalWords > 0 ? `${totalWords} Từ vựng` : "Đang tải..."}</span>
+                    <span>{stats.length > 0 ? `${totalWords} Từ vựng` : "Đang tải..."}</span>
                   </div>
 
                   <div className="w-full h-px bg-[#f0ebe0]"></div>
@@ -80,7 +80,7 @@ export default function ReviewSelectionPage() {
                     {level.desc}. Chuẩn bị kỹ càng trước khi bước vào chế độ chiến đấu.
                   </p>
 
-                  <button className="w-full mt-2 py-3 rounded-xl bg-[#1d180c] text-[#ffc629] font-bold text-sm group-hover:bg-[#e7564a] group-hover:text-white transition-colors flex items-center justify-center gap-2">
+                  <button className="w-full mt-2 py-3 rounded-xl bg-[#1d180c] text-[#ffc629] font-bold text-sm group-hover:bg-[#e7564a] group-hover:text-white transition-colors flex items-center justify-center gap-2 cursor-pointer">
                     <Zap className="w-4 h-4 fill-current" />
                     Bắt Đầu Khiêu Chiến
                   </button>

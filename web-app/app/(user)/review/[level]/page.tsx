@@ -218,7 +218,7 @@ export default function BattleModePage() {
             <span>Quay lại</span>
           </Link>
 
-          <div className="hidden sm:flex items-center gap-2 px-3 py-1 bg-[#f4f0e6] rounded-full text-[#6b5c35] text-xs font-bold uppercase tracking-wider">
+          <div className="flex items-center gap-2 px-3 py-1 bg-[#f4f0e6] rounded-full text-[#6b5c35] text-xs font-bold uppercase tracking-wider">
             <span>Tổng Hán Tự:</span>
             <span className="text-[#1d180c] text-sm">{totalWords}</span>
           </div>
