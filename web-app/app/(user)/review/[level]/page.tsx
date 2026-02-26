@@ -55,10 +55,17 @@ export default function BattleModePage() {
   useEffect(() => {
     const fetchCount = async () => {
       const supabase = createClient()
-      const { count } = await supabase
+      let query = supabase
         .from('vocabulary')
         .select('*', { count: 'exact', head: true })
-        .eq('hsk_level', parseInt(level))
+
+      if (level === '7-9') {
+        query = query.in('hsk_level', [7, 8, 9])
+      } else {
+        query = query.eq('hsk_level', parseInt(level))
+      }
+
+      const { count } = await query
 
       if (count) {
         setTotalPages(Math.ceil(count / ITEMS_PER_PAGE))
@@ -76,10 +83,17 @@ export default function BattleModePage() {
       const from = (page - 1) * ITEMS_PER_PAGE
       const to = from + ITEMS_PER_PAGE - 1
 
-      const { data, error } = await supabase
+      let query = supabase
         .from('vocabulary')
         .select('*')
-        .eq('hsk_level', parseInt(level))
+
+      if (level === '7-9') {
+        query = query.in('hsk_level', [7, 8, 9])
+      } else {
+        query = query.eq('hsk_level', parseInt(level))
+      }
+
+      const { data, error } = await query
         .order('id', { ascending: true })
         .range(from, to)
 

@@ -7,12 +7,13 @@ import { useEffect, useState } from "react"
 import { getUserStats } from "@/app/(user)/learn/actions"
 
 const levels = [
-  { id: 1, name: "HSK 1", title: "Luyện Khí Tầng 1", desc: "Khởi đầu hành trình", color: "from-green-400 to-emerald-600", icon: "🌱" },
-  { id: 2, name: "HSK 2", title: "Trúc Cơ Nhập Môn", desc: "Xây dựng nền tảng", color: "from-teal-400 to-cyan-600", icon: "🎋" },
-  { id: 3, name: "HSK 3", title: "Kim Đan Sơ Kỳ", desc: "Thành thạo cơ bản", color: "from-blue-400 to-indigo-600", icon: "🔮" },
-  { id: 4, name: "HSK 4", title: "Nguyên Anh Xuất Thế", desc: "Đột phá giới hạn", color: "from-violet-400 to-purple-600", icon: "⚡" },
-  { id: 5, name: "HSK 5", title: "Hóa Thần Chi Cảnh", desc: "Tinh thông ngôn ngữ", color: "from-fuchsia-400 to-pink-600", icon: "🔥" },
-  { id: 6, name: "HSK 6", title: "Độ Kiếp Phi Thăng", desc: "Đỉnh cao hán ngữ", color: "from-orange-400 to-red-600", icon: "🐲" },
+  { id: "1", name: "HSK 1", title: "Luyện Khí Tầng 1", desc: "Khởi đầu hành trình", color: "from-green-400 to-emerald-600", icon: "🌱" },
+  { id: "2", name: "HSK 2", title: "Trúc Cơ Nhập Môn", desc: "Xây dựng nền tảng", color: "from-teal-400 to-cyan-600", icon: "🎋" },
+  { id: "3", name: "HSK 3", title: "Kim Đan Sơ Kỳ", desc: "Thành thạo cơ bản", color: "from-blue-400 to-indigo-600", icon: "🔮" },
+  { id: "4", name: "HSK 4", title: "Nguyên Anh Xuất Thế", desc: "Đột phá giới hạn", color: "from-violet-400 to-purple-600", icon: "⚡" },
+  { id: "5", name: "HSK 5", title: "Hóa Thần Chi Cảnh", desc: "Tinh thông ngôn ngữ", color: "from-fuchsia-400 to-pink-600", icon: "🔥" },
+  { id: "6", name: "HSK 6", title: "Độ Kiếp Phi Thăng", desc: "Đỉnh cao hán ngữ", color: "from-orange-400 to-red-600", icon: "🐲" },
+  { id: "7-9", name: "HSK 7-9", title: "Tiên Giới Tối Thượng", desc: "Cảnh giới tối cao", color: "from-amber-500 to-rose-600", icon: "👑" },
 ]
 
 export default function ReviewSelectionPage() {
@@ -35,8 +36,11 @@ export default function ReviewSelectionPage() {
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {levels.map((level, index) => {
-          const levelStat = stats.find(s => s.level === level.id)
+          const levelStat = level.id === "7-9"
+            ? { total: stats.filter(s => s.level >= 7 && s.level <= 9).reduce((acc: number, s: any) => acc + (s.total || 0), 0) }
+            : stats.find(s => s.level === parseInt(level.id))
           const totalWords = levelStat ? levelStat.total : 0
+          const difficultyLevel = level.id === "7-9" ? 5 : Math.ceil(parseInt(level.id) / 2)
 
           return (
             <Link href={`/review/${level.id}`} key={level.id} className="group">
@@ -65,7 +69,7 @@ export default function ReviewSelectionPage() {
                   <div className="flex justify-between items-center text-sm text-[#6b5c35] font-medium">
                     <span className="flex items-center gap-1.5">
                       <Star className="w-4 h-4 text-yellow-500 fill-current" />
-                      Độ khó: {Array(Math.ceil(level.id / 2)).fill(0).map((_, i) => "★").join('')}
+                      Độ khó: {Array(difficultyLevel).fill(0).map((_, i) => "★").join('')}
                     </span>
                     <span>{totalWords > 0 ? `${totalWords} Từ vựng` : "Đang tải..."}</span>
                   </div>
