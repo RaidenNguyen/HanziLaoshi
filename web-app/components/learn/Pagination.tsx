@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button"
 interface PaginationProps {
   currentPage: number
   totalPages: number
-  level: number
+  level: string | number
 }
 
 export function Pagination({ currentPage, totalPages, level }: PaginationProps) {

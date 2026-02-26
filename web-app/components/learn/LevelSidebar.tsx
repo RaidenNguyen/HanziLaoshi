@@ -7,7 +7,7 @@ import { Progress } from "@/components/ui/progress"
 import { Trophy, BookOpen } from "lucide-react"
 
 interface LevelStats {
-  level: number
+  level: string | number
   total: number
   mastered: number
   learning: number
@@ -20,7 +20,7 @@ interface LevelSidebarProps {
 
 export function LevelSidebar({ stats }: LevelSidebarProps) {
   const searchParams = useSearchParams()
-  const currentLevel = parseInt(searchParams.get("level") || "1")
+  const currentLevel = searchParams.get("level") || "1"
 
   return (
     <div className="w-full md:w-64 space-y-6">
@@ -32,7 +32,7 @@ export function LevelSidebar({ stats }: LevelSidebarProps) {
         <div className="space-y-2">
           {stats.map((stat) => {
             const progress = stat.total > 0 ? (stat.mastered / stat.total) * 100 : 0
-            const isActive = currentLevel === stat.level
+            const isActive = currentLevel === String(stat.level)
 
             return (
               <Link
@@ -67,10 +67,10 @@ export function LevelSidebar({ stats }: LevelSidebarProps) {
         <h3 className="font-bold text-lg mb-4 text-gray-800">
           Thống kê HSK {currentLevel}
         </h3>
-        {stats.find(s => s.level === currentLevel) ? (
+        {stats.find(s => String(s.level) === currentLevel) ? (
           <div className="space-y-3">
             {(() => {
-              const stat = stats.find(s => s.level === currentLevel)!
+              const stat = stats.find(s => String(s.level) === currentLevel)!
 
               const items = [
                 {

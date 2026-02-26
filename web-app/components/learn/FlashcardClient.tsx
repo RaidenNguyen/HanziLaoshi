@@ -19,7 +19,7 @@ import { useRouter, useSearchParams } from "next/navigation"
 
 interface FlashcardClientProps {
   vocabulary: any[]
-  hskLevel: number
+  hskLevel: string | number
   currentPage: number
   totalPages: number
   totalItems: number

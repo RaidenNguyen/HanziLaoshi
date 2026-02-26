@@ -4,7 +4,7 @@ import { createClient } from "@/utils/supabase/server";
 import { revalidatePath } from "next/cache";
 
 export async function getVocabulary(
-  level: number = 1,
+  levels: number[] = [1],
   page: number = 1,
   limit: number = 20,
 ) {
@@ -18,7 +18,7 @@ export async function getVocabulary(
   const from = (page - 1) * limit;
   const to = from + limit - 1;
 
-  // Fetch vocabulary for the specific level with pagination
+  // Fetch vocabulary for the specific level(s) with pagination
   const {
     data: vocab,
     error,
@@ -35,7 +35,7 @@ export async function getVocabulary(
     `,
       { count: "exact" },
     )
-    .eq("hsk_level", level)
+    .in("hsk_level", levels)
     .range(from, to)
     .order("created_at", { ascending: true });
 
@@ -100,6 +100,18 @@ export async function getUserStats() {
   );
 
   return stats;
+}
+
+// Helper: get combined stats for HSK 7-9
+export function getCombinedStats79(stats: any[]) {
+  const s79 = stats.filter((s) => s.level >= 7 && s.level <= 9);
+  return {
+    level: "7-9",
+    total: s79.reduce((a: number, s: any) => a + s.total, 0),
+    mastered: s79.reduce((a: number, s: any) => a + s.mastered, 0),
+    learning: s79.reduce((a: number, s: any) => a + s.learning, 0),
+    new: s79.reduce((a: number, s: any) => a + s.new, 0),
+  };
 }
 
 export async function getFilteredVocabulary(
