@@ -40,7 +40,7 @@ export default function ReviewSelectionPage() {
             ? { total: stats.filter(s => s.level >= 7 && s.level <= 9).reduce((acc: number, s: any) => acc + (s.total || 0), 0) }
             : stats.find(s => s.level === parseInt(level.id))
           const totalWords = levelStat ? levelStat.total : 0
-          const difficultyLevel = level.id === "7-9" ? 4 : parseInt(level.id)
+          const difficultyLevel = index + 1
 
           return (
             <Link href={`/review/${level.id}`} key={level.id} className="group">
